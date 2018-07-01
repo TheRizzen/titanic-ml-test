@@ -2,6 +2,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn import linear_model
+from sklearn import svm
 import numpy as np
 
 def correctMissingAge(pdf):
@@ -23,31 +24,27 @@ def processDataFrame(pdf):
     new_df = correctMissingAge(new_df)
     new_df['Embarked'] = new_df['Embarked'].fillna(new_df['Embarked'].dropna().mode()[0])
     new_df['Embarked'] = new_df['Embarked'].map({'S': 0, 'C': 1, 'Q': 2}).astype(int)
+    new_df = new_df.dropna()  # Shouldn't drop anything
     return new_df
 
 
 df = pd.read_csv('train.csv')
 df = processDataFrame(df)
-print(df)
 
 X = df.drop(columns='Survived')
 Y = df['Survived']
 
+df_test = pd.read_csv('test.csv')
+df_test = processDataFrame(df_test)
+
+X_test = df_test.copy()
+
+svc = svm.SVC()
+svc.fit(X, Y)
+
+Y_test = svc.predict(X_test)
+
 #logreg = linear_model.LogisticRegression()
 #logreg.fit(X, Y)
 #
-#df_test = pd.read_csv('test.csv')
-#df_test['Sex'].replace(['female', 'male'], [0, 1], inplace=True)
-#df_test['Embarked'].replace(['S', 'C', 'Q'], [0, 1, 2], inplace=True)
-#df_test = df_test.drop(columns=['Name', 'Ticket', 'SibSp', 'Parch', 'Fare', 'Cabin'])
-#df_test = df_test.dropna()
-#X_test = df_test.drop(columns=['PassengerId'])
 #Y_test = logreg.predict(X_test)
-#
-#df_test['Survived'] = Y_test
-#
-#fig, (ax0, ax1) = plt.subplots(ncols=2, sharey=True)
-#sns.barplot(x='Sex', y='Survived', hue='Pclass', data=df, ax=ax0)
-#sns.barplot(x='Sex', y='Survived', hue='Pclass', data=df_test, ax=ax1)
-#
-#plt.show()
