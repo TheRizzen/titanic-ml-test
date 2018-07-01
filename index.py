@@ -21,6 +21,8 @@ def processDataFrame(pdf):
     new_df['Sex'] = new_df['Sex'].map({'female': 0, 'male': 1}).astype(int)
     new_df = new_df.drop(columns=['SibSp', 'Parch'])
     new_df = correctMissingAge(new_df)
+    new_df['Embarked'] = new_df['Embarked'].fillna(new_df['Embarked'].dropna().mode()[0])
+    new_df['Embarked'] = new_df['Embarked'].map({'S': 0, 'C': 1, 'Q': 2}).astype(int)
     return new_df
 
 
