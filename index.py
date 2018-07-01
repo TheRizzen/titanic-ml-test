@@ -4,8 +4,8 @@ import seaborn as sns
 from sklearn import linear_model
 import numpy as np
 
-def correctMissingAge(df):
-    new_df = df
+def correctMissingAge(pdf):
+    new_df = pdf
     for pclass in range(1, 4):
         for sex in range(0, 2):
             ref_df = new_df[(new_df['Pclass'] == pclass) & (new_df['Sex'] == sex)]['Age'].dropna()
@@ -14,8 +14,8 @@ def correctMissingAge(df):
     new_df['Age'] = new_df['Age'].astype(int)
     return new_df
 
-def processDataFrame(df):
-    new_df = df
+def processDataFrame(pdf):
+    new_df = pdf
     new_df = new_df.drop(columns=['Name', 'Ticket', 'PassengerId', 'Name', 'Cabin'])
     new_df['Relatives'] = new_df['Parch'] + new_df['SibSp']
     new_df['Sex'] = new_df['Sex'].map({'female': 0, 'male': 1}).astype(int)
